@@ -201,6 +201,147 @@
     </div>
   </section>
 
+<!-- Formulario de Reserva -->
+  <section id="reservar" class="reservar">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">📅 Reservar Turno</span>
+        <h2>Agenda tu cita</h2>
+        <p>Completa el formulario para reservar un turno para tu mascota</p>
+      </div>
+
+      <div class="reservar-wrapper">
+        <form id="formReserva" class="form-reserva">
+          <!-- Tipo de servicio -->
+          <div class="form-section">
+            <h3>Tipo de servicio</h3>
+            <div class="form-group">
+              <label for="servicio">Servicio *</label>
+              <select id="servicio" name="servicio" required>
+                <option value="">Selecciona un servicio</option>
+                <option value="Veterinaria">Veterinaria - $5.000</option>
+                <option value="Estética/Baño">Estética y Baño - $4.500</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Fecha y hora -->
+          <div class="form-section">
+            <h3>Fecha y hora</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fecha">Fecha *</label>
+                <input type="date" id="fecha" name="fecha" required>
+                <small class="form-help">Solo de lunes a viernes</small>
+              </div>
+              <div class="form-group">
+                <label for="hora">Hora *</label>
+                <select id="hora" name="hora" required>
+                  <option value="">Primero selecciona fecha</option>
+                </select>
+                <small class="form-help">Horario: 9:00 a 17:30</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Datos del dueño -->
+          <div class="form-section">
+            <h3>Tus datos</h3>
+            <div class="form-group">
+              <label for="nombreDueno">Nombre completo *</label>
+              <input type="text" id="nombreDueno" name="nombreDueno" 
+                     placeholder="Ej: Juan Pérez" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="telefono">Teléfono celular *</label>
+                <input type="tel" id="telefono" name="telefono" 
+                       placeholder="091234567" maxlength="9" required>
+                <small class="form-help">9 dígitos sin espacios</small>
+              </div>
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" 
+                       placeholder="ejemplo@email.com" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Datos de la mascota -->
+          <div class="form-section">
+            <h3>Datos de tu mascota</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="nombreMascota">Nombre *</label>
+                <input type="text" id="nombreMascota" name="nombreMascota" 
+                       placeholder="Ej: Luna" required>
+              </div>
+              <div class="form-group">
+                <label for="especie">Especie *</label>
+                <select id="especie" name="especie" required>
+                  <option value="">Selecciona</option>
+                  <option value="Perro">Perro</option>
+                  <option value="Gato">Gato</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mensaje de error -->
+          <div id="mensajeError" class="mensaje-error" style="display: none;"></div>
+
+          <!-- Botones -->
+          <div class="form-actions">
+            <button type="button" class="btn btn-outline" onclick="document.getElementById('formReserva').reset(); document.getElementById('hora').innerHTML = '&lt;option value=&quot;&quot;&gt;Primero selecciona fecha&lt;/option&gt;'; document.getElementById('mensajeError').style.display = 'none';">
+              Limpiar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Confirmar Reserva
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal de confirmación -->
+  <div id="modalConfirmacion" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="cerrarModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-icon-success">✓</div>
+        <h2>¡Reserva confirmada!</h2>
+      </div>
+      <div class="modal-body">
+        <p>Se ha enviado la confirmación a <strong id="emailConfirmacion"></strong></p>
+        <div class="resumen-turno">
+          <h3>Resumen de tu turno:</h3>
+          <div class="resumen-item">
+            <span class="resumen-label">Mascota:</span>
+            <span id="resumenMascota"></span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Servicio:</span>
+            <span id="resumenServicio"></span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Fecha:</span>
+            <span id="resumenFecha"></span>
+          </div>
+          <div class="resumen-item">
+            <span class="resumen-label">Hora:</span>
+            <span id="resumenHora"></span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="cerrarModal()">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+
   <!-- Footer -->
   <footer id="contacto" class="footer">
     <div class="container">
@@ -290,5 +431,8 @@
       nav.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
     });
   </script>
+
+  <script src="src/core/reservas.js"></script>
+  <script src="src/app.js"></script>
 </body>
 </html>
