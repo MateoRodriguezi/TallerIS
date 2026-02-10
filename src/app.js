@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', function () {
   const inputTelefono = document.getElementById('telefono');
   const mensajeError = document.getElementById('mensajeError');
 
+  // ✅ UX HU03: no mostrar opciones inválidas → hora deshabilitada hasta tener servicio + fecha
+  selectHora.disabled = true;
+
   const hoy = new Date();
   const manana = new Date(hoy);
   manana.setDate(hoy.getDate() + 1);
@@ -89,10 +92,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const resultado = crearReserva(datos);
 
     if (resultado.exito) {
-      // 1) Mandamos email real
       enviarEmailConfirmacion(resultado.turno)
         .then(() => {
-          // 2) Si salió OK, mostramos confirmación y reseteamos
           mostrarConfirmacion(resultado.turno);
           formReserva.reset();
           cargarHorariosVacios();
@@ -100,36 +101,33 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch((error) => {
           console.error("EmailJS error:", error);
-          // La reserva ya quedó guardada igual, pero avisamos
           mostrarError("La reserva se guardó, pero hubo un error enviando el email.");
         });
-
     } else {
       mostrarError(resultado.mensaje);
     }
   });
 
   function cargarHorariosVacios() {
-    selectHora.innerHTML = '<option value="">Primero selecciona fecha</option>';
+    selectHora.disabled = true;
+    selectHora.innerHTML = '<option value="">Selecciona servicio y fecha</option>';
   }
 
   function actualizarHorariosDisponibles() {
     const servicio = selectServicio.value;
     const fecha = inputFecha.value;
 
-    if (!fecha) {
+    // ✅ Si falta algo, no mostramos horarios “genéricos”
+    if (!servicio || !fecha) {
       cargarHorariosVacios();
       return;
     }
 
-    if (!servicio) {
-      selectHora.innerHTML = '<option value="">Selecciona un servicio</option>';
-      return;
-    }
-
+    // ✅ Generamos horarios válidos para ese servicio
     const todosLosHorarios = generarHorarios(servicio);
     const horariosOcupados = obtenerHorariosOcupados(servicio, fecha);
 
+    selectHora.disabled = false;
     selectHora.innerHTML = '<option value="">Selecciona una hora</option>';
 
     let hayDisponibles = false;
@@ -144,8 +142,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
+    // ✅ Si no hay disponibles: no dejes elegir algo que va a fallar después
     if (!hayDisponibles) {
-      selectHora.innerHTML = '<option value="">No hay horarios disponibles</option>';
+      selectHora.disabled = true;
+      selectHora.innerHTML = '<option value="">Sin horarios disponibles</option>';
       mostrarError('No hay horarios disponibles para esta fecha y servicio. Intenta con otra fecha.');
     } else {
       ocultarError();
@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const servicioLindo =
       turno.servicio === 'veterinaria' ? 'Veterinaria' :
-        turno.servicio === 'bano' ? 'Estética/Baño' :
-          turno.servicio;
+      turno.servicio === 'bano' ? 'Estética/Baño' :
+      turno.servicio;
 
     document.getElementById('resumenServicio').textContent = servicioLindo;
     document.getElementById('resumenFecha').textContent = formatearFecha(turno.fecha);
