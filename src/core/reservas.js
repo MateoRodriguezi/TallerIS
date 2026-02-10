@@ -191,3 +191,133 @@ function formatearFecha(fecha) {
   const [anio, mes, dia] = fecha.split('-');
   return `${dia}/${mes}/${anio}`;
 }
+
+// --- Control admin: mostrar/ocultar secciones y listar reservas ---
+(function(){
+  // Si no existe arreglo reservas, lo creamos con precarga
+  if (typeof reservas === 'undefined' || !Array.isArray(reservas)) {
+    window.reservas = [
+      { cliente: "Ana Pérez", mascota: "Luna", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "09:00" },
+      { cliente: "Carlos Gómez", mascota: "Max", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "10:00" },
+      { cliente: "María Rodríguez", mascota: "Nina", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "11:00" },
+      { cliente: "José Fernández", mascota: "Rocky", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "12:00" },
+      { cliente: "Lucía Silva", mascota: "Toby", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "13:00" },
+      { cliente: "Martín López", mascota: "Milo", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "14:00" },
+      { cliente: "Sofía Cabrera", mascota: "Kira", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "15:00" },
+      { cliente: "Diego Torres", mascota: "Simba", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "16:00" },
+      { cliente: "Valentina Méndez", mascota: "Coco", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "17:00" },
+      { cliente: "Federico Castro", mascota: "Bella", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "09:00" },
+      { cliente: "Camila Duarte", mascota: "Zeus", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "10:00" },
+      { cliente: "Agustín Morales", mascota: "Lola", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "11:00" },
+      { cliente: "Florencia Rivas", mascota: "Bruno", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "12:00" },
+      { cliente: "Sebastián Núñez", mascota: "Mora", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "13:00" },
+      { cliente: "Paula Hernández", mascota: "Leo", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "14:00" },
+      { cliente: "Gonzalo Martínez", mascota: "Nala", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "15:00" },
+      { cliente: "Carolina Vega", mascota: "Tommy", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "16:00" },
+      { cliente: "Rodrigo Pereira", mascota: "Maya", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "17:00" },
+      { cliente: "Julieta Ramos", mascota: "Chispa", servicio: "Consulta veterinaria", fecha: "2026-02-12", hora: "09:00" },
+      { cliente: "Nicolás Sosa", mascota: "Duke", servicio: "Estética/Baño", fecha: "2026-02-12", hora: "10:00" }
+    ];
+  }
+
+  // Referencias UI
+  const loginForm = document.getElementById('loginForm') || null;
+  const loginSection = document.getElementById('login') || null;
+  const adminPanel = document.getElementById('adminPanel');
+  const listarBtn = document.getElementById('listarBtn');
+  const cerrarSesionBtn = document.getElementById('cerrarSesionBtn');
+  const tablaWrapper = document.getElementById('tablaWrapper');
+  const tabla = document.getElementById('tablaReservas');
+
+  // Secciones públicas a ocultar al loguear
+  const sectionsToHide = [
+    document.querySelector('.hero'),
+    document.querySelector('#servicios'),
+    document.getElementById('reservar'),
+    document.querySelector('.mobile-preview'),
+    document.querySelector('#galeria'),
+    document.querySelector('.footer')
+  ];
+
+  // Función para ocultar todas las secciones públicas
+  function ocultarSeccionesPublicas() {
+    sectionsToHide.forEach(s => { if (s) s.style.display = 'none'; });
+  }
+  function mostrarSeccionesPublicas() {
+    sectionsToHide.forEach(s => { if (s) s.style.display = ''; });
+  }
+
+  // Manejo del submit del login (usa el formulario que ya tienes)
+  if (loginForm) {
+    loginForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      // toma valores (adapta ids si usas otros)
+      const usuario = (document.getElementById('nombreUsuario') || document.getElementById('usuario') || {}).value || '';
+      const pass = (document.getElementById('password') || {}).value || '';
+
+      if (usuario.trim() === 'admin' && pass.trim() === '1234') {
+        ocultarSeccionesPublicas();
+        // mostrar panel admin y botones
+        if (adminPanel) adminPanel.style.display = 'block';
+        if (listarBtn) listarBtn.style.display = 'inline-block';
+        if (cerrarSesionBtn) cerrarSesionBtn.style.display = 'inline-block';
+        // ocultar el formulario de login
+        if (loginSection) loginSection.style.display = 'none';
+        alert('Bienvenido Administrador');
+      } else {
+        alert('Usuario o contraseña incorrectos');
+      }
+    });
+  }
+
+  // Listar reservas: solo cuando admin haga click
+  if (listarBtn) {
+    listarBtn.addEventListener('click', function(){
+      const tbody = tabla.querySelector('tbody');
+      tbody.innerHTML = ''; // limpiar
+      // Ordenar por fecha y hora (opcional)
+      const copia = reservas.slice().sort((a,b) => {
+        if (a.fecha === b.fecha) return a.hora.localeCompare(b.hora);
+        return a.fecha.localeCompare(b.fecha);
+      });
+      copia.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${r.cliente}</td>
+          <td>${r.mascota}</td>
+          <td>${r.servicio}</td>
+          <td>${r.fecha}</td>
+          <td>${r.hora}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      tablaWrapper.style.display = 'block';
+      tabla.style.display = 'table';
+      tabla.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
+  // Cerrar sesión: volver al estado público
+  if (cerrarSesionBtn) {
+    cerrarSesionBtn.addEventListener('click', function(){
+      // ocultar panel admin
+      if (adminPanel) adminPanel.style.display = 'none';
+      // ocultar tabla y botones
+      if (tablaWrapper) tablaWrapper.style.display = 'none';
+      if (listarBtn) listarBtn.style.display = 'none';
+      if (cerrarSesionBtn) cerrarSesionBtn.style.display = 'none';
+      // mostrar secciones públicas
+      mostrarSeccionesPublicas();
+      // limpiar login inputs si existen
+      const u = document.getElementById('nombreUsuario') || document.getElementById('usuario');
+      const p = document.getElementById('password');
+      if (u) u.value = '';
+      if (p) p.value = '';
+      // opcional: scroll al inicio
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+})();
+
+
+
