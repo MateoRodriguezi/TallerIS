@@ -192,12 +192,12 @@ function formatearFecha(fecha) {
   return `${dia}/${mes}/${anio}`;
 }
 
-// --- Control admin: mostrar/ocultar secciones y listar reservas ---
+//  Listar reservas y Login
 (function(){
-  // Si no existe arreglo reservas, lo creamos con precarga
+  // hacemos una precarga de reservas
   if (typeof reservas === 'undefined' || !Array.isArray(reservas)) {
     window.reservas = [
-      { cliente: "Ana Pérez", mascota: "Luna", servicio: "Consulta veterinaria", fecha: "2026-02-15--", hora: "09:00" },
+      { cliente: "Ana Pérez", mascota: "Luna", servicio: "Consulta veterinaria", fecha: "2026-02-15", hora: "09:00" },
       { cliente: "Carlos Gómez", mascota: "Max", servicio: "Estética/Baño", fecha: "2026-02-15", hora: "10:00" },
       { cliente: "María Rodríguez", mascota: "Nina", servicio: "Consulta veterinaria", fecha: "2026-02-15", hora: "11:00" },
       { cliente: "José Fernández", mascota: "Rocky", servicio: "Estética/Baño", fecha: "2026-02-15", hora: "12:00" },
@@ -229,7 +229,7 @@ function formatearFecha(fecha) {
   const tablaWrapper = document.getElementById('tablaWrapper');
   const tabla = document.getElementById('tablaReservas');
 
-  // Secciones públicas a ocultar al loguear
+  // Secciones publicas para ocultar cuando nos loqueamos
   const sectionsToHide = [
     document.querySelector('.hero'),
     document.querySelector('#servicios'),
@@ -239,7 +239,6 @@ function formatearFecha(fecha) {
     document.querySelector('.footer')
   ];
 
-  // Función para ocultar todas las secciones públicas
   function ocultarSeccionesPublicas() {
     sectionsToHide.forEach(s => { if (s) s.style.display = 'none'; });
   }
@@ -247,21 +246,18 @@ function formatearFecha(fecha) {
     sectionsToHide.forEach(s => { if (s) s.style.display = ''; });
   }
 
-  // Manejo del submit del login (usa el formulario que ya tienes)
+  // Login
   if (loginForm) {
     loginForm.addEventListener('submit', function(e){
       e.preventDefault();
-      // toma valores (adapta ids si usas otros)
       const usuario = (document.getElementById('nombreUsuario') || document.getElementById('usuario') || {}).value || '';
       const pass = (document.getElementById('password') || {}).value || '';
 
       if (usuario.trim() === 'admin' && pass.trim() === '1234') {
         ocultarSeccionesPublicas();
-        // mostrar panel admin y botones
         if (adminPanel) adminPanel.style.display = 'block';
         if (listarBtn) listarBtn.style.display = 'inline-block';
         if (cerrarSesionBtn) cerrarSesionBtn.style.display = 'inline-block';
-        // ocultar el formulario de login
         if (loginSection) loginSection.style.display = 'none';
         alert('Bienvenido Administrador');
       } else {
@@ -270,12 +266,11 @@ function formatearFecha(fecha) {
     });
   }
 
-  // Listar reservas: solo cuando admin haga click
+  // Listamos las reservas creando la tabla
   if (listarBtn) {
     listarBtn.addEventListener('click', function(){
       const tbody = tabla.querySelector('tbody');
       tbody.innerHTML = ''; // limpiar
-      // Ordenar por fecha y hora (opcional)
       const copia = reservas.slice().sort((a,b) => {
         if (a.fecha === b.fecha) return a.hora.localeCompare(b.hora);
         return a.fecha.localeCompare(b.fecha);
@@ -297,16 +292,15 @@ function formatearFecha(fecha) {
     });
   }
 
-  // Cerrar sesión: volver al estado público
+  // Cerrar sesión
   if (cerrarSesionBtn) {
     cerrarSesionBtn.addEventListener('click', function(){
-      // ocultar panel admin
+      // Oculatamos el panel del adminsitrador y la tabla
       if (adminPanel) adminPanel.style.display = 'none';
-      // ocultar tabla y botones
       if (tablaWrapper) tablaWrapper.style.display = 'none';
       if (listarBtn) listarBtn.style.display = 'none';
       if (cerrarSesionBtn) cerrarSesionBtn.style.display = 'none';
-      // mostrar secciones públicas
+      // volvemos a mostrar las secciones publicas
       mostrarSeccionesPublicas();
       // limpiar login inputs si existen
       const u = document.getElementById('nombreUsuario') || document.getElementById('usuario');
