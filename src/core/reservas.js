@@ -197,26 +197,26 @@ function formatearFecha(fecha) {
   // Si no existe arreglo reservas, lo creamos con precarga
   if (typeof reservas === 'undefined' || !Array.isArray(reservas)) {
     window.reservas = [
-      { cliente: "Ana Pérez", mascota: "Luna", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "09:00" },
-      { cliente: "Carlos Gómez", mascota: "Max", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "10:00" },
-      { cliente: "María Rodríguez", mascota: "Nina", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "11:00" },
-      { cliente: "José Fernández", mascota: "Rocky", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "12:00" },
-      { cliente: "Lucía Silva", mascota: "Toby", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "13:00" },
-      { cliente: "Martín López", mascota: "Milo", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "14:00" },
-      { cliente: "Sofía Cabrera", mascota: "Kira", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "15:00" },
-      { cliente: "Diego Torres", mascota: "Simba", servicio: "Estética/Baño", fecha: "2026-02-10", hora: "16:00" },
-      { cliente: "Valentina Méndez", mascota: "Coco", servicio: "Consulta veterinaria", fecha: "2026-02-10", hora: "17:00" },
-      { cliente: "Federico Castro", mascota: "Bella", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "09:00" },
-      { cliente: "Camila Duarte", mascota: "Zeus", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "10:00" },
-      { cliente: "Agustín Morales", mascota: "Lola", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "11:00" },
-      { cliente: "Florencia Rivas", mascota: "Bruno", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "12:00" },
-      { cliente: "Sebastián Núñez", mascota: "Mora", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "13:00" },
-      { cliente: "Paula Hernández", mascota: "Leo", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "14:00" },
-      { cliente: "Gonzalo Martínez", mascota: "Nala", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "15:00" },
-      { cliente: "Carolina Vega", mascota: "Tommy", servicio: "Consulta veterinaria", fecha: "2026-02-11", hora: "16:00" },
-      { cliente: "Rodrigo Pereira", mascota: "Maya", servicio: "Estética/Baño", fecha: "2026-02-11", hora: "17:00" },
-      { cliente: "Julieta Ramos", mascota: "Chispa", servicio: "Consulta veterinaria", fecha: "2026-02-12", hora: "09:00" },
-      { cliente: "Nicolás Sosa", mascota: "Duke", servicio: "Estética/Baño", fecha: "2026-02-12", hora: "10:00" }
+      { cliente: "Ana Pérez", mascota: "Luna", servicio: "Consulta veterinaria", fecha: "2026-02-15--", hora: "09:00" },
+      { cliente: "Carlos Gómez", mascota: "Max", servicio: "Estética/Baño", fecha: "2026-02-15", hora: "10:00" },
+      { cliente: "María Rodríguez", mascota: "Nina", servicio: "Consulta veterinaria", fecha: "2026-02-15", hora: "11:00" },
+      { cliente: "José Fernández", mascota: "Rocky", servicio: "Estética/Baño", fecha: "2026-02-15", hora: "12:00" },
+      { cliente: "Lucía Silva", mascota: "Toby", servicio: "Consulta veterinaria", fecha: "2026-02-15", hora: "13:00" },
+      { cliente: "Martín López", mascota: "Milo", servicio: "Estética/Baño", fecha: "2026-02-15", hora: "14:00" },
+      { cliente: "Sofía Cabrera", mascota: "Kira", servicio: "Consulta veterinaria", fecha: "2026-02-15", hora: "15:00" },
+      { cliente: "Diego Torres", mascota: "Simba", servicio: "Estética/Baño", fecha: "2026-02-15", hora: "16:00" },
+      { cliente: "Valentina Méndez", mascota: "Coco", servicio: "Consulta veterinaria", fecha: "2026-02-15", hora: "17:00" },
+      { cliente: "Federico Castro", mascota: "Bella", servicio: "Estética/Baño", fecha: "2026-02-16", hora: "09:00" },
+      { cliente: "Camila Duarte", mascota: "Zeus", servicio: "Consulta veterinaria", fecha: "2026-02-16", hora: "10:00" },
+      { cliente: "Agustín Morales", mascota: "Lola", servicio: "Estética/Baño", fecha: "2026-02-16", hora: "11:00" },
+      { cliente: "Florencia Rivas", mascota: "Bruno", servicio: "Consulta veterinaria", fecha: "2026-02-16", hora: "12:00" },
+      { cliente: "Sebastián Núñez", mascota: "Mora", servicio: "Estética/Baño", fecha: "2026-02-16", hora: "13:00" },
+      { cliente: "Paula Hernández", mascota: "Leo", servicio: "Consulta veterinaria", fecha: "2026-02-16", hora: "14:00" },
+      { cliente: "Gonzalo Martínez", mascota: "Nala", servicio: "Estética/Baño", fecha: "2026-02-16", hora: "15:00" },
+      { cliente: "Carolina Vega", mascota: "Tommy", servicio: "Consulta veterinaria", fecha: "2026-02-16", hora: "16:00" },
+      { cliente: "Rodrigo Pereira", mascota: "Maya", servicio: "Estética/Baño", fecha: "2026-02-16", hora: "17:00" },
+      { cliente: "Julieta Ramos", mascota: "Chispa", servicio: "Consulta veterinaria", fecha: "2026-02-17", hora: "09:00" },
+      { cliente: "Nicolás Sosa", mascota: "Duke", servicio: "Estética/Baño", fecha: "2026-02-17", hora: "10:00" }
     ];
   }
 
