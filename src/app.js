@@ -9,6 +9,7 @@ Llama funciones del core
 ❌ No validaciones complejas
 ❌ No reglas de negocio
 */
+
 document.addEventListener('DOMContentLoaded', function () {
 
   const formReserva = document.getElementById('formReserva');
@@ -49,9 +50,27 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   selectServicio.addEventListener('change', function () {
-    // Cuando cambia el servicio, recalculamos horarios según duración
     actualizarHorariosDisponibles();
   });
+
+  function enviarEmailConfirmacion(turno) {
+    const params = {
+      email: turno.email,
+      mascota: turno.nombreMascota,
+      servicio: turno.servicio,
+      fecha: formatearFecha(turno.fecha),
+      hora: turno.hora
+    };
+
+    return emailjs.send(
+      "service_7pautcp",
+      "template_35ivlqm",
+      params,
+      "8yxTf1yMGfmQKL_Kr"
+    );
+  }
+
+  // ------------------------------------------
 
   formReserva.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -70,10 +89,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const resultado = crearReserva(datos);
 
     if (resultado.exito) {
-      mostrarConfirmacion(resultado.turno);
-      formReserva.reset();
-      cargarHorariosVacios();
-      ocultarError();
+      // 1) Mandamos email real
+      enviarEmailConfirmacion(resultado.turno)
+        .then(() => {
+          // 2) Si salió OK, mostramos confirmación y reseteamos
+          mostrarConfirmacion(resultado.turno);
+          formReserva.reset();
+          cargarHorariosVacios();
+          ocultarError();
+        })
+        .catch((error) => {
+          console.error("EmailJS error:", error);
+          // La reserva ya quedó guardada igual, pero avisamos
+          mostrarError("La reserva se guardó, pero hubo un error enviando el email.");
+        });
+
     } else {
       mostrarError(resultado.mensaje);
     }
@@ -87,19 +117,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const servicio = selectServicio.value;
     const fecha = inputFecha.value;
 
-    // Si falta fecha, seguimos igual que antes
     if (!fecha) {
       cargarHorariosVacios();
       return;
     }
 
-    // Si hay fecha pero no hay servicio, no podemos decidir 30 vs 60
     if (!servicio) {
       selectHora.innerHTML = '<option value="">Selecciona un servicio</option>';
       return;
     }
 
-    // ✅ ACÁ está el fix: pasamos servicio al core
     const todosLosHorarios = generarHorarios(servicio);
     const horariosOcupados = obtenerHorariosOcupados(servicio, fecha);
 
@@ -125,12 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function cargarTodosLosHorarios() {
-    // Esto ya no tiene sentido si hay 2 duraciones distintas.
-    // Lo dejamos coherente: pedimos servicio primero.
-    selectHora.innerHTML = '<option value="">Selecciona un servicio</option>';
-  }
-
   function mostrarError(mensaje) {
     mensajeError.textContent = mensaje;
     mensajeError.style.display = 'flex';
@@ -145,9 +166,12 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('emailConfirmacion').textContent = turno.email;
     document.getElementById('resumenMascota').textContent = turno.nombreMascota;
 
-    // Si en el core guardaste servicio normalizado, acá capaz querés mostrarlo lindo
-    document.getElementById('resumenServicio').textContent = turno.servicio;
+    const servicioLindo =
+      turno.servicio === 'veterinaria' ? 'Veterinaria' :
+        turno.servicio === 'bano' ? 'Estética/Baño' :
+          turno.servicio;
 
+    document.getElementById('resumenServicio').textContent = servicioLindo;
     document.getElementById('resumenFecha').textContent = formatearFecha(turno.fecha);
     document.getElementById('resumenHora').textContent = turno.hora;
 
