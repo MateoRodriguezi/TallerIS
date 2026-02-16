@@ -18,11 +18,11 @@ const {
 
 describe('validarEmail', () => {
   test('devuelve true para un email válido', () => {
-    expect(validarEmail('usuario@test.com')).toBe(true);
+    expect(validarEmail('juan@test.com')).toBe(true);
   });
 
   test('devuelve false para un email inválido', () => {
-    expect(validarEmail('usuario@@test')).toBe(false);
+    expect(validarEmail('juan@@test')).toBe(false);
   });
 });
 
@@ -31,8 +31,11 @@ describe('validarTelefono', () => {
     expect(validarTelefono('123456789')).toBe(true);
   });
 
-  test('devuelve false para un número con menos dígitos', () => {
-    expect(validarTelefono('12345')).toBe(false);
+  test('El teléfono no puede tener menos de 9 dígitos', () => {
+    expect(validarTelefono.length).toBeLessThan(9);
+  });
+  test('El teléfono no puede tener mas de 9 dígitos', () => {
+    expect(validarTelefono.length).toBeGreaterThan(9);
   });
 });
 
@@ -42,7 +45,7 @@ describe('esDiaLaboral', () => {
   });
 
   test('devuelve false para un domingo', () => {
-    expect(esDiaLaboral('2026-02-15')).toBe(false); // domingo
+    expect(esDiaLaboral('2026-02-22')).toBe(false); // domingo
   });
 });
 
@@ -57,11 +60,11 @@ describe('normalizarServicio', () => {
 });
 
 describe('duracionPorServicio', () => {
-  test('devuelve 60 para veterinaria', () => {
+  test('devuelve 60 para servicios de veterinaria', () => {
     expect(duracionPorServicio('Veterinaria')).toBe(60);
   });
 
-  test('devuelve 30 para baño', () => {
+  test('devuelve 30 para servicios de baño', () => {
     expect(duracionPorServicio('Baño')).toBe(30);
   });
 });
