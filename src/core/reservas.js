@@ -192,7 +192,23 @@ function formatearFecha(fecha) {
   return `${dia}/${mes}/${anio}`;
 }
 
+function suma(a, b) {
+  return a + b;
+}
 
-
+module.exports = {
+  validarEmail,
+  validarTelefono,
+  esDiaLaboral,
+  normalizarServicio,
+  duracionPorServicio,
+  generarHorarios,
+  obtenerTurnos,
+  guardarTurnos,
+  obtenerHorariosOcupados,
+  verificarDisponibilidad,
+  crearReserva,
+  formatearFecha
+};
 
 
