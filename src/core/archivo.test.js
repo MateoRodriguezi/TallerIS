@@ -27,16 +27,21 @@ describe('validarEmail', () => {
 });
 
 describe('validarTelefono', () => {
-  test('devuelve true para un número de 9 dígitos', () => {
-    expect(validarTelefono('123456789')).toBe(true);
+  test('El teléfono tiene 9 dígitos válidos', () => {
+    const telefono = "123456789";
+    expect(validarTelefono(telefono)).toBe(true);
   });
 
   test('El teléfono no puede tener menos de 9 dígitos', () => {
-    expect(validarTelefono.length).toBeLessThan(9);
+    const telefono = "12345";
+    expect(validarTelefono(telefono)).toBe(false);
   });
-  test('El teléfono no puede tener mas de 9 dígitos', () => {
-    expect(validarTelefono.length).toBeGreaterThan(9);
+
+  test('El teléfono no puede tener más de 9 dígitos', () => {
+    const telefono = "12345678910";
+    expect(validarTelefono(telefono)).toBe(false);
   });
+
 });
 
 describe('esDiaLaboral', () => {
@@ -47,6 +52,10 @@ describe('esDiaLaboral', () => {
   test('devuelve false para un domingo', () => {
     expect(esDiaLaboral('2026-02-22')).toBe(false); // domingo
   });
+
+   test('devuelve false para un sabado', () => {
+    expect(esDiaLaboral('2026-02-21')).toBe(false); // sabado
+  });
 });
 
 describe('normalizarServicio', () => {
@@ -55,7 +64,7 @@ describe('normalizarServicio', () => {
   });
 
   test('elimina espacios y mayúsculas', () => {
-    expect(normalizarServicio('Veterinaria')).toBe('veterinaria');
+    expect(normalizarServicio('  Veterinaria  ')).toBe('veterinaria');
   });
 });
 
