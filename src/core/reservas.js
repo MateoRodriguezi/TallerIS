@@ -1,13 +1,3 @@
-/*
-src/core/reservas.js
-Lógica pura (testeable)
-Validaciones
-Verificar choques de reservas
-Reglas del sistema
-✔ No DOM
-✔ No document
-✔ No alert
-*/
 
 const CONFIG = {
   HORARIO_INICIO: 9,
@@ -59,7 +49,6 @@ function duracionPorServicio(servicio) {
   if (s === 'veterinaria') return CONFIG.DURACION_TURNO_VETERINARIA; // 60
   if (s === 'bano') return CONFIG.DURACION_TURNO_BANO;               // 30
 
-  // fallback seguro
   return CONFIG.DURACION_TURNO_BANO;
 }
 
